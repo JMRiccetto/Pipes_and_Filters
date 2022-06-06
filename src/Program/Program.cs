@@ -58,6 +58,34 @@ namespace CompAndDel
             IPipe pipeSerial = new PipeSerial(greyScaleFilter, pipeSerial2);
             
             IPicture result = pipeSerial.Send(picture); */
+
+            //Ejercicio 4:
+
+            PictureProvider provider = new PictureProvider();
+            IPicture picture = provider.GetPicture(@"luke.jpg");
+        
+            IPipe pipeNull = new PipeNull();
+
+            IFilter twitterFilter = new TwitterFilter();
+            IPipe pipeSerial6 = new PipeSerial(twitterFilter, pipeNull);
+
+            IFilter saveFilter = new SaveFilter();
+            IPipe pipeSerial5 = new PipeSerial(saveFilter, pipeSerial6);
+            
+            IFilter negativeFilter = new FilterNegative();
+            IPipe pipeSerial4 = new PipeSerial(negativeFilter, pipeSerial5);
+            
+            IPipe pipeSerial3 = new PipeSerial(twitterFilter, pipeSerial4);
+            
+            IPipe pipeSerial2 = new PipeSerial(saveFilter, pipeSerial3);
+            
+            IFilter conditionalFilter = new FaceFilter();
+            IPipe conditionalForkPipe = new PipeFork(conditionalFilter, pipeSerial2, pipeNull);
+
+            IFilter greyScaleFilter = new FilterGreyscale();
+            IPipe pipeSerial = new PipeSerial(greyScaleFilter, pipeSerial2);
+            
+            IPicture result = pipeSerial.Send(picture);
         }
     }
 }
